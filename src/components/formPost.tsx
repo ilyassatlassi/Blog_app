@@ -1,4 +1,6 @@
 "use client"
+
+import { useState } from "react"
 import { unknown } from "zod"
 import { ReloadIcon } from "@radix-ui/react-icons"
 import { Button } from "./ui/button"
@@ -11,12 +13,14 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-import { useForm} from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Input } from "./ui/input"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
+import { actions } from "@/lib/utils"
+
 
 const formSchema = z.object({
     postTitle: z.string().min(2, {
@@ -32,7 +36,9 @@ const formSchema = z.object({
     tag: z.string().optional()
 })
 
-const FormPost = () => {
+const bgInput = "bg-white"
+
+const FormPost = ({ action, isEditing }: actions) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -45,21 +51,25 @@ const FormPost = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        await new Promise((resolve) => setTimeout(resolve, 2000) )
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         console.log(values)
         form.reset()
     }
+    // const [Edit, setEdit] = useState(false)
 
+    // function handleEditing() {
+    //     setEdit(true)
+    // }
     return (
-        <Card>
+        <Card className="md:w-1/2 w-full bg-neutral-200">
             <CardHeader>
                 <CardTitle>
-                    <h1 className="text-3xl font-bold">Add new post</h1>
+                    <h1 className="text-3xl text font-bold">Add {action} post</h1>
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                    <form  onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                         <FormField
                             control={form.control}
                             name="postTitle"
@@ -67,7 +77,7 @@ const FormPost = () => {
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Post Title..." {...field} />
+                                        <Input className={bgInput} placeholder="Post Title..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -80,7 +90,7 @@ const FormPost = () => {
                                 <FormItem>
                                     <FormLabel>Content</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Post content..." {...field} />
+                                        <Textarea className={bgInput} placeholder="Post content..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -94,7 +104,7 @@ const FormPost = () => {
                                     <FormLabel>Tags</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value} >
-                                            <SelectTrigger  {...field} className="w-[180px]">
+                                            <SelectTrigger  {...field} className=" bg-white">
                                                 <SelectValue placeholder="Tags" />
                                             </SelectTrigger>
                                             <SelectContent  >
@@ -108,12 +118,17 @@ const FormPost = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={form.formState.isSubmitting} className="w-full" type="submit">
+                        <Button disabled={form.formState.isSubmitting} className="w-full h-full" type="submit">
                             {form.formState.isSubmitting &&
-                            (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> )
+                                (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
-                            Create
-                            </Button>
+                            {/* {form.getValues.length > 0 } */}
+                            {/* {isEditing? "Update" : "Edit" } */}
+                            {/* {Edit ? "Update" : " Edit"} */}
+                            {action}
+
+
+                        </Button>
                     </form>
                 </Form>
             </CardContent>

@@ -4,10 +4,11 @@ import { Button } from './ui/button'
 import { TrashIcon ,Pencil1Icon } from '@radix-ui/react-icons'
 
 const ButtonActions = () => {
+
     return (
         <div className='space-x-4'>
             <Link href={'/edit/id'}>
-            <Button variant="secondary">
+            <Button className='bg-neutral-200' variant="outline">
                 <Pencil1Icon/>
                 Edit
             </Button>
