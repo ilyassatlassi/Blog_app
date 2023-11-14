@@ -20,8 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { actions } from "@/lib/utils"
-import { useQuery } from "react-query"
+import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import { Tag } from "@prisma/client"
 
 
 const formSchema = z.object({
@@ -55,19 +56,18 @@ const FormPost = ({ action, isEditing }: actions) => {
         // ✅ This will be type-safe and validated.
         await new Promise((resolve) => setTimeout(resolve, 2000))
         console.log(values)
-        
+
         form.reset()
     }
-    
-    const { data: dataTags, isLoading: isLoadingTags } = useQuery({
-            queryKey: ['tags'], queryFn: async () => {
-                const response = await axios('api/tags')
-                console.log(response.data)
-                return response.data
-                
-            }
-        })
-        console.log(dataTags)
+
+    const { data: dataTags, isLoading: isLoadingTags } = useQuery<Tag[]>({
+        queryKey: ['tags'], queryFn: async () => {
+            const response = await axios('api/tags')
+            return response.data
+
+        }
+    })
+    console.log(dataTags)
 
     return (
         <Card className="md:w-1/2 w-full bg-neutral-200">
@@ -117,9 +117,9 @@ const FormPost = ({ action, isEditing }: actions) => {
                                                 <SelectValue placeholder="Tags" />
                                             </SelectTrigger>
                                             <SelectContent  >
-                                                <SelectItem value="Light">Light</SelectItem>
-                                                <SelectItem value="Dark">Dark</SelectItem>
-                                                <SelectItem value="System">System</SelectItem>
+                                                {dataTags?.map(tag => (<SelectItem key={tag.id} value={tag.name}>{tag.name}</SelectItem>)
+                                                )
+                                                }
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
