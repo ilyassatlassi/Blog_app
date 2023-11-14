@@ -20,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { actions } from "@/lib/utils"
+import { useQuery } from "react-query"
+import axios from "axios"
 
 
 const formSchema = z.object({
@@ -53,13 +55,20 @@ const FormPost = ({ action, isEditing }: actions) => {
         // ✅ This will be type-safe and validated.
         await new Promise((resolve) => setTimeout(resolve, 2000))
         console.log(values)
+        
         form.reset()
     }
-    // const [Edit, setEdit] = useState(false)
+    
+    const { data: dataTags, isLoading: isLoadingTags } = useQuery({
+            queryKey: ['tags'], queryFn: async () => {
+                const response = await axios('api/tags')
+                console.log(response.data)
+                return response.data
+                
+            }
+        })
+        console.log(dataTags)
 
-    // function handleEditing() {
-    //     setEdit(true)
-    // }
     return (
         <Card className="md:w-1/2 w-full bg-neutral-200">
             <CardHeader>
@@ -69,7 +78,7 @@ const FormPost = ({ action, isEditing }: actions) => {
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form  onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                         <FormField
                             control={form.control}
                             name="postTitle"
@@ -122,17 +131,11 @@ const FormPost = ({ action, isEditing }: actions) => {
                             {form.formState.isSubmitting &&
                                 (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
-                            {/* {form.getValues.length > 0 } */}
-                            {/* {isEditing? "Update" : "Edit" } */}
-                            {/* {Edit ? "Update" : " Edit"} */}
                             {action}
-
-
                         </Button>
                     </form>
                 </Form>
             </CardContent>
-
         </Card>
     )
 
