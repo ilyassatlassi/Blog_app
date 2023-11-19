@@ -7,8 +7,8 @@ const Header = () => {
   return (
     <header className="sm:flex sm:justify-between py-3 px-4 border-b bg-neutral-200">
       <Container>
-        <div className="relative flex h-16 items-center justify-between w-full">
-          <Link href="/" className="ml-4 lg:ml-0">
+        <div className="flex h-16 items-center justify-between w-full">
+          <Link href="/">
            <BookmarkFilledIcon className="h-10 w-10"/>
           </Link>
           <Link href={'/create'}>

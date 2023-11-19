@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 const bgInput = "bg-white"
 
-const FormPost = ({ action, isEditing }: actions) => {
+const FormPost = ({ action }: actions) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -54,8 +54,8 @@ const FormPost = ({ action, isEditing }: actions) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        console.log(values)
+        // await new Promise((resolve) => setTimeout(resolve, 2000))
+        // console.log(values)
 
         form.reset()
     }
@@ -67,7 +67,7 @@ const FormPost = ({ action, isEditing }: actions) => {
 
         }
     })
-    console.log(dataTags)
+    // console.log(dataTags)
 
     return (
         <Card className="md:w-1/2 w-full bg-neutral-200">
