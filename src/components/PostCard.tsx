@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { Tag } from "@prisma/client"
 import { FC } from "react"
+import { Badge } from "./ui/badge"
 
 type propsCard = {
     post: {
@@ -21,14 +22,13 @@ const PostCard: FC<propsCard> = ({ post }) => {
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="line-clamp-3">
                 {content}
             </CardContent>
-            {tag.name}
-            <CardFooter className="flex justify-">
-                <Link href={`/blog/${id}`}><Button variant="link">Read more...</Button></Link>
+            <Link className="flex justify-end" href={`/blog/${id}`}><Button variant="link">Read more</Button></Link>
+            <CardFooter>
+                <Badge>{tag.name}</Badge>
             </CardFooter>
-
         </Card>
     )
 }

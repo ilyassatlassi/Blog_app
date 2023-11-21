@@ -1,10 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { unknown } from "zod"
+
 import { ReloadIcon } from "@radix-ui/react-icons"
 import { Button } from "./ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import {
     Select,
     SelectContent,
@@ -64,11 +63,8 @@ const FormPost = ({ action }: actions) => {
         queryKey: ['tags'], queryFn: async () => {
             const response = await axios('api/tags')
             return response.data
-
         }
     })
-    // console.log(dataTags)
-
     return (
         <Card className="md:w-1/2 w-full bg-neutral-200">
             <CardHeader>
@@ -138,8 +134,6 @@ const FormPost = ({ action }: actions) => {
             </CardContent>
         </Card>
     )
-
-
 }
 
 export default FormPost

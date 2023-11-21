@@ -10,7 +10,7 @@ type buttonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 const BackButton = ({className}: buttonProps) => {
     const route = useRouter()
   return (
-    <Button className={twMerge("bg-neutral-200 w-auto",className)} variant="outline" onClick={()=> route.back()}>
+    <Button className={twMerge("bg-neutral-200 p-5 w-auto",className)} variant="outline" onClick={()=> route.back()}>
     <ChevronLeftIcon className="h-4 w-4"/> Back
    
   </Button>
