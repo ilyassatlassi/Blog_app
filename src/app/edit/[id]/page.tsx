@@ -5,12 +5,8 @@ const EditPost = () => {
     return (
 
         <div className="mt-10 mx-auto w-full max-w-7xl relative px-4 sm:px-6 lg:px-8  ">
-            <div className="absolute top-0 hidden md:flex ">
-                <BackButton />
-            </div>
-            <div className="flex flex-col items-center justify-center ">
+                <BackButton className="hidden sm:flex" />
                 <FormPost action="Update" />
-            </div>
         </div>
 
     )

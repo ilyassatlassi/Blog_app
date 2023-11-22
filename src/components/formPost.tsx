@@ -66,7 +66,7 @@ const FormPost = ({ action }: actions) => {
         }
     })
     return (
-        <Card className="md:w-1/2 w-full bg-neutral-200">
+        <Card className="max-w-2xl inset-x-4  absolute md:inset-x-0 sm:top-14 m-auto max-h-max shadow-2xl bg-neutral-200">
             <CardHeader>
                 <CardTitle>
                     <h1 className="text-3xl text font-bold">Add {action} post</h1>

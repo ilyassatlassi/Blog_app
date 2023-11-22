@@ -18,7 +18,7 @@ const PostCard: FC<propsCard> = ({ post }) => {
     const { id, title, content, tag } = post
 
     return (
-        <Card className="w-full" >
+        <Card className="w-full shadow-2xl" >
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>

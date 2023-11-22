@@ -10,12 +10,11 @@ import prisma from "../../prisma/db";
         content: true,
         tag: true
        },
-        orderBy:{ createdAt: "desc"
+        orderBy:{ createdAt: "asc"
         }
       }
      )
      return response
-    
   }
 
 async function Home() {
