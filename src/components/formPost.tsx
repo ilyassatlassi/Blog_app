@@ -41,6 +41,8 @@ const formSchema = z.object({
 const bgInput = "bg-white"
 
 const FormPost = ({ action }: actions) => {
+
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -61,12 +63,14 @@ const FormPost = ({ action }: actions) => {
 
     const { data: dataTags, isLoading: isLoadingTags } = useQuery<Tag[]>({
         queryKey: ['tags'], queryFn: async () => {
+
             const response = await axios('api/tags')
+            //  await new Promise((resolve) => setTimeout(resolve, 2000))
             return response.data
         }
     })
     return (
-        <Card className="max-w-2xl inset-x-4  absolute md:inset-x-0 sm:top-14 m-auto max-h-max shadow-2xl bg-neutral-200">
+        <Card className="max-w-2xl inset-x-4 absolute md:inset-x-0 sm:top-14 m-auto max-h-max shadow-2xl bg-neutral-200">
             <CardHeader>
                 <CardTitle>
                     <h1 className="text-3xl text font-bold">Add {action} post</h1>
