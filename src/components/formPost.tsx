@@ -14,61 +14,57 @@ import {
 
 import { useForm } from "react-hook-form"
 import { Input } from "./ui/input"
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { actions } from "@/lib/utils"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { Tag } from "@prisma/client"
+import { formSchema } from "@/lib/FormValidatiopn"
+import { z } from "zod";
 
-
-const formSchema = z.object({
-    postTitle: z.string().min(2, {
-        message: "Title must be at least 2 characters.",
-    }).max(50, {
-        message: "Title must contain at most 50 character(s)"
-    }),
-    postContent: z.string().min(2, {
-        message: "Content must be at least 2 characters.",
-    }).max(1500, {
-        message: "Content must contain at most 1500 character(s)"
-    }),
-    tag: z.string().optional()
-})
 
 const bgInput = "bg-white"
 
 const FormPost = ({ action }: actions) => {
 
-    
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             postTitle: "",
             postContent: "",
-            tag: "",
-        },
+            tagId: ""
+        }
+    })
+
+
+
+    const { mutate: createPost  } = useMutation({
+        mutationFn: (values: z.infer<typeof formSchema>) => {
+            return axios.post('api/posts/create', values)
+        }
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        // await new Promise((resolve) => setTimeout(resolve, 2000))
-        // console.log(values)
-
+        console.log(values)
+        createPost(values  )
         form.reset()
     }
 
-    const { data: dataTags, isLoading: isLoadingTags } = useQuery<Tag[]>({
+    const { data: dataTags} = useQuery<Tag[]>({
         queryKey: ['tags'], queryFn: async () => {
 
             const response = await axios('api/tags')
             //  await new Promise((resolve) => setTimeout(resolve, 2000))
             return response.data
         }
-    })
+    }
+    )
+
     return (
         <Card className="max-w-2xl inset-x-4 absolute md:inset-x-0 sm:top-14 m-auto max-h-max shadow-2xl bg-neutral-200">
             <CardHeader>
@@ -107,17 +103,18 @@ const FormPost = ({ action }: actions) => {
                         />
                         <FormField
                             control={form.control}
-                            name="tag"
+                            name="tagId"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Tags</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value} >
-                                            <SelectTrigger  {...field} className=" bg-white">
+                                        <Select onValueChange={field.onChange} defaultValue={field.name} >
+
+                                            <SelectTrigger {...field} className=" bg-white">
                                                 <SelectValue placeholder="Tags" />
                                             </SelectTrigger>
                                             <SelectContent  >
-                                                {dataTags?.map(tag => (<SelectItem key={tag.id} value={tag.name}>{tag.name}</SelectItem>)
+                                                {dataTags?.map(tag => (<SelectItem key={tag.id} value={tag.id}>{tag.name}</SelectItem>)
                                                 )
                                                 }
                                             </SelectContent>
