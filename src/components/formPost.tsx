@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form"
 import { Input } from "./ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { actions } from "@/lib/utils"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -23,6 +23,7 @@ import axios from "axios"
 import { Tag } from "@prisma/client"
 import { formSchema } from "@/lib/FormValidatiopn"
 import { z } from "zod";
+import toast from "react-hot-toast"
 
 
 const bgInput = "bg-white"
@@ -39,26 +40,32 @@ const FormPost = ({ action }: actions) => {
         }
     })
 
-
-
-    const { mutate: createPost  } = useMutation({
-        mutationFn: (values: z.infer<typeof formSchema>) => {
+    const { mutate: createPost, isError: createError ,isPending: createPending, isSuccess: createSucces} = useMutation({
+        mutationFn: async (values: z.infer<typeof formSchema>)  => {
+            // await new Promise((resolve) => setTimeout(resolve, 2000))
             return axios.post('api/posts/create', values)
+        },onError: (error) => {
+            toast.error(error.message)
+            return 
+        },onSuccess: () => {
+            toast.success("Successfully Created!")
         }
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        createPost(values  )
-        form.reset()
+        createPost(values)
+        if(createError){
+            return
+        }
+       form.reset()
     }
 
     const { data: dataTags} = useQuery<Tag[]>({
         queryKey: ['tags'], queryFn: async () => {
 
             const response = await axios('api/tags')
-            //  await new Promise((resolve) => setTimeout(resolve, 2000))
             return response.data
         }
     }
@@ -124,7 +131,7 @@ const FormPost = ({ action }: actions) => {
                             )}
                         />
                         <Button disabled={form.formState.isSubmitting} className="w-full h-full" type="submit">
-                            {form.formState.isSubmitting &&
+                            {createPending &&
                                 (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
                             {action}

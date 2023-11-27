@@ -30,9 +30,10 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(post, { status: 200 });
   } catch (error) {
+    console.log(getErrorMessage(error))
     return NextResponse.json(
       {
-        error: getErrorMessage(error),
+        message: getErrorMessage(error),
       },
       { status: 500 }
     );

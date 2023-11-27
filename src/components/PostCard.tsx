@@ -18,11 +18,11 @@ const PostCard: FC<propsCard> = ({ post }) => {
     const { id, title, content, tag } = post
 
     return (
-        <Card className="w-full shadow-2xl" >
+        <Card className="w-full flex flex-col shadow-2xl" >
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent className="line-clamp-3">
+            <CardContent className="line-clamp-1">
                 {content}
             </CardContent>
             <Link className="flex justify-end" href={`/blog/${id}`}><Button variant="link">Read more</Button></Link>
