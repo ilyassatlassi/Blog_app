@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../prisma/db";
 import { formSchema } from "@/lib/FormValidatiopn";
 import { z } from "zod";
+import { PostIdProps } from "@/lib/utils";
 
 const getErrorMessage = (error: unknown): string => {
   let message: string;
@@ -17,18 +18,40 @@ const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
-export async function POST(req: Request) {
+
+export async function DELETE(context: PostIdProps) {
+  try {
+    await prisma.post.delete({
+      where: {
+        id: context.params.postId,
+      },
+    });
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: getErrorMessage(error),
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATH(req: Request, context: PostIdProps) {
   try {
     const result: z.infer<typeof formSchema> = await req.json();
-    
-    const post = await prisma.post.create({
-        data: {
-            title: result.postTitle,
-            content: result.postContent,
-            tagId: result.tagId
-        }
+
+    const post = await prisma.post.update({
+      where: {
+        id: context.params.postId,
+      },
+      data: {
+        title: result.postTitle,
+        content: result.postContent,
+        tagId: result.tagId,
+      },
     });
-    return NextResponse.json(post, { status: 200 });
+    return NextResponse.json( {message: 'Update Succes'}, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       {

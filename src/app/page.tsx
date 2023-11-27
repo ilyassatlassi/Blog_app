@@ -1,5 +1,4 @@
 import PostCard from "@/components/PostCard";
-import { Button } from "@/components/ui/button";
 import prisma from "../../prisma/db";
 
  const getPosts = async () => {

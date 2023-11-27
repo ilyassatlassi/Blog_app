@@ -12,3 +12,9 @@ export type actions = {
   isEditing?: boolean,
   // onSubmit: (values: z.infer<typeof formSchema>) => void;
 };
+
+export type PostIdProps = {
+  params: {
+      postId: string
+  }
+}
