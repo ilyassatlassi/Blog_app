@@ -3,23 +3,27 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
 import { TrashIcon, Pencil1Icon } from '@radix-ui/react-icons'
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { PostIdProps } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
-const ButtonActions = ({ params }: PostIdProps) => {
+type ButtonActionsProps = {
+    id: string
+}
+
+const ButtonActions = ({id}:ButtonActionsProps ) => {
+    // console.log(postId)
     const router = useRouter()
 
     const { mutate: deletePost } = useMutation({
         mutationFn: async () => {
             // await new Promise((resolve) => setTimeout(resolve, 2000))
-            return axios.delete(`api/posts/${params.postId}`)
+            return axios.delete(`/api/posts/${id}`)
         }, onError: (error) => {
             toast.error(error.message)
             return
-        }, onSuccess: (data) => {
+        }, onSuccess: () => {
             router.push('/')
             router.refresh()
             // toast.success(data.status)

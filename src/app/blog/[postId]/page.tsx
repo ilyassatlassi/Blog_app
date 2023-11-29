@@ -40,7 +40,8 @@ const BlogPostPage = async ({ params }: PostIdProps) => {
                 </CardContent>
                 <CardFooter className="flex flex-col items-start gap-4">
                     <Badge>{post?.tag.name}</Badge>
-                     <ButtonActions params={params}  />
+                    
+                     <ButtonActions id={params.postId}  />
                 </CardFooter>
             </Card>
         </div>

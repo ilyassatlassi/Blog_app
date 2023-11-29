@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../prisma/db";
 import { formSchema } from "@/lib/FormValidatiopn";
 import { z } from "zod";
-import { PostIdProps } from "@/lib/utils";
+
 
 const getErrorMessage = (error: unknown): string => {
   let message: string;
@@ -18,12 +18,19 @@ const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
+ type PostIdProps = {
+    params: {
+        postId: string
+    }
+  }
+
 
 export async function DELETE(context: PostIdProps) {
   try {
+    const{ params } = context
     await prisma.post.delete({
       where: {
-        id: context.params.postId,
+        id: params.postId,
       },
     });
     return new Response(null, { status: 204 });
@@ -41,7 +48,7 @@ export async function PATH(req: Request, context: PostIdProps) {
   try {
     const result: z.infer<typeof formSchema> = await req.json();
 
-    const post = await prisma.post.update({
+     await prisma.post.update({
       where: {
         id: context.params.postId,
       },
