@@ -28,11 +28,12 @@ import toast from "react-hot-toast"
 
 const bgInput = "bg-white"
 
-const FormPost = ({ action }: actions) => {
+const FormPost = ({ action, isEditing }: actions) => {
 
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        
         defaultValues: {
             postTitle: "",
             postContent: "",

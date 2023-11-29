@@ -68,3 +68,21 @@ export async function PATH(req: Request, context: PostIdProps) {
     );
   }
 }
+
+export async function GET(req: Request, context:PostIdProps) {
+  try {
+    const post = await prisma.post.findFirst({
+      where:{
+        id: context.params.postId
+      }
+    });
+    return NextResponse.json(post, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: getErrorMessage(error),
+      },
+      { status: 500 }
+    );
+  }
+}
