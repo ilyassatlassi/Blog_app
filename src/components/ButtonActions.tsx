@@ -23,10 +23,10 @@ const ButtonActions = ({id}:ButtonActionsProps ) => {
         }, onError: (error) => {
             toast.error(error.message)
             return
-        }, onSuccess: () => {
+        }, onSuccess: (data) => {
             router.push('/')
             router.refresh()
-            // toast.success(data.status)
+            toast.success("Deleted successfully")
         }
     })
 

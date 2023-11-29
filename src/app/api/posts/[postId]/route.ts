@@ -25,7 +25,7 @@ const getErrorMessage = (error: unknown): string => {
   }
 
 
-export async function DELETE(context: PostIdProps) {
+export async function DELETE(req: Request, context: PostIdProps) {
   try {
     const{ params } = context
     await prisma.post.delete({
