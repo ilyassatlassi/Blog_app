@@ -44,7 +44,7 @@ export async function DELETE(req: Request, context: PostIdProps) {
   }
 }
 
-export async function PATH(req: Request, context: PostIdProps) {
+export async function PATCH(req: Request, context: PostIdProps) {
   try {
     const result: z.infer<typeof formSchema> = await req.json();
 
@@ -53,12 +53,12 @@ export async function PATH(req: Request, context: PostIdProps) {
         id: context.params.postId,
       },
       data: {
-        title: result.postTitle,
-        content: result.postContent,
+        title: result.title,
+        content: result.content,
         tagId: result.tagId,
       },
     });
-    return NextResponse.json( {message: 'Update Succes'}, { status: 200 });
+    return NextResponse.json( {message: 'Updated Succes'}, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       {
@@ -74,6 +74,9 @@ export async function GET(req: Request, context:PostIdProps) {
     const post = await prisma.post.findFirst({
       where:{
         id: context.params.postId
+      },
+      include:{
+        tag: true,
       }
     });
     return NextResponse.json(post, { status: 200 });

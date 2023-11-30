@@ -28,45 +28,45 @@ import toast from "react-hot-toast"
 
 const bgInput = "bg-white"
 
-const FormPost = ({ action, isEditing }: actions) => {
+const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
 
 
-    const form = useForm<z.infer<typeof formSchema>>({
+     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        // defaultValues: iniV
         
         defaultValues: {
-            postTitle: "",
-            postContent: "",
-            tagId: ""
+            title: initValues?.title,
+            content: initValues?.content,
+            tagId: initValues?.tagId
         }
     })
 
-    const { mutate: createPost, isError: createError ,isPending: createPending, isSuccess: createSucces} = useMutation({
-        mutationFn: async (values: z.infer<typeof formSchema>)  => {
-            // await new Promise((resolve) => setTimeout(resolve, 2000))
-            return axios.post('api/posts/create', values)
-        },onError: (error) => {
-            toast.error(error.message)
-            return 
-        },onSuccess: () => {
-            toast.success("Successfully Created!")
-        }
-    })
+    // const { mutate: createPost, isError: createError ,isPending: createPending} = useMutation({
+    //     mutationFn: async (values: z.infer<typeof formSchema>)  => {
+    //         // await new Promise((resolve) => setTimeout(resolve, 2000))
+    //         return axios.post('api/posts/create', values)
+    //     },onError: (error) => {
+    //         toast.error(error.message)
+    //         return 
+    //     },onSuccess: () => {
+    //         toast.success("Successfully Created!")
+    //     }
+    // })
+    
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        createPost(values)
-        if(createError){
-            return
-        }
-       form.reset()
-    }
+    // async function handleOnSubmit(values: z.infer<typeof formSchema>) {
+    //     // Do something with the form values.
+    //     // ✅ This will be type-safe and validated.
+    //     onSubmit(values)
+      
+    //    form.reset()
+    // }
 
     const { data: dataTags} = useQuery<Tag[]>({
         queryKey: ['tags'], queryFn: async () => {
 
-            const response = await axios('api/tags')
+            const response = await axios('/api/tags')
             return response.data
         }
     }
@@ -84,7 +84,7 @@ const FormPost = ({ action, isEditing }: actions) => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                         <FormField
                             control={form.control}
-                            name="postTitle"
+                            name="title"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
@@ -97,12 +97,12 @@ const FormPost = ({ action, isEditing }: actions) => {
                         />
                         <FormField
                             control={form.control}
-                            name="postContent"
+                            name="content"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Content</FormLabel>
                                     <FormControl>
-                                        <Textarea className={bgInput} placeholder="Post content..." {...field} />
+                                        <Textarea className={bgInput}  placeholder="Post content..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -115,7 +115,7 @@ const FormPost = ({ action, isEditing }: actions) => {
                                 <FormItem>
                                     <FormLabel>Tags</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={field.onChange} defaultValue={field.name} >
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} >
 
                                             <SelectTrigger {...field} className=" bg-white">
                                                 <SelectValue placeholder="Tags" />
@@ -132,9 +132,10 @@ const FormPost = ({ action, isEditing }: actions) => {
                             )}
                         />
                         <Button disabled={form.formState.isSubmitting} className="w-full h-full" type="submit">
-                            {createPending &&
+                            {form.formState.isSubmitting &&
                                 (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
+                        
                             {action}
                         </Button>
                     </form>

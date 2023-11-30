@@ -11,8 +11,9 @@ export function cn(...inputs: ClassValue[]) {
 export type actions = { 
   action: "Create" | "Edit" | "Update",
   isEditing?: boolean,
-  initValues?: Post[]
-  // onSubmit: (values: z.infer<typeof formSchema>) => void;
+  initValues?: z.infer<typeof formSchema>
+  onSubmit: (values: z.infer<typeof formSchema>) => void;
+  // values:z.infer<typeof formSchema>
 };
 
 export type PostIdProps = {
