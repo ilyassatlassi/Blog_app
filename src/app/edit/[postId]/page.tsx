@@ -8,6 +8,7 @@ import { PostIdProps } from "@/lib/utils"
 import { formSchema } from "@/lib/FormValidatiopn"
 import { z } from "zod"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 const EditPost = ({params}:PostIdProps) => {
     const{postId} = params
@@ -18,8 +19,9 @@ const EditPost = ({params}:PostIdProps) => {
                 return response.data
             }
         })
-
-        const { mutate: createPost, isError: createError, isPending:creatPending } = useMutation({
+        const router = useRouter()
+        const { mutate: createPost, isError: createError, isPending:creatPending, isSuccess: createSucccess } = useMutation({
+            
             mutationFn: async (values: z.infer<typeof formSchema>)  => {
                 // await new Promise((resolve) => setTimeout(resolve, 2000))
                 return await axios.patch(`/api/posts/${postId}`, values)
@@ -27,6 +29,8 @@ const EditPost = ({params}:PostIdProps) => {
                 toast.error(error.message)
                 return 
             },onSuccess: () => {
+                router.back()
+                router.refresh()
                 toast.success("Successfully Updated!")
             }
         })
@@ -39,7 +43,7 @@ const EditPost = ({params}:PostIdProps) => {
         <div className="mt-10 mx-auto w-full max-w-7xl relative px-4 sm:px-6 lg:px-8  ">
             
                 <BackButton className="hidden sm:flex" />
-                {editLoading? ('loading....'): (<FormPost action="Update" isEditing={true} initValues={dataPost}  onSubmit={handlleOnSubmit} />)}
+                {editLoading? ('loading....'): (<FormPost action="Update" isEditing={true} initValues={dataPost}  onSubmit={handlleOnSubmit} error={createError} pending={creatPending} success={createSucccess} />)}
                 
         </div>
 

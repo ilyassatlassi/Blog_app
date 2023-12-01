@@ -13,6 +13,9 @@ export type actions = {
   isEditing?: boolean,
   initValues?: z.infer<typeof formSchema>
   onSubmit: (values: z.infer<typeof formSchema>) => void;
+  error: boolean
+  success: boolean
+  pending: boolean
   // values:z.infer<typeof formSchema>
 };
 

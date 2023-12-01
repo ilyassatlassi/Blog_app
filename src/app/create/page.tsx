@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 
 const CreatePage = () => {
-    const { mutate: createPost, isError: createError, isPending:creatPending } = useMutation({
+    const { mutate: createPost, isError: createError, isPending:creatPending , isSuccess: createSucces } = useMutation({
         mutationFn: async (values: z.infer<typeof formSchema>)  => {
             // await new Promise((resolve) => setTimeout(resolve, 2000))
             return await axios.post('/api/posts/create', values)
@@ -26,7 +26,7 @@ const CreatePage = () => {
     return (
         <div className="mx-auto w-full max-w-7xl relative px-4 sm:px-6 lg:px-8 mt-10">
             <BackButton className="hidden sm:flex" />
-            <FormPost isEditing= {false}  action = "Create" onSubmit={handlleOnSubmit}/>
+            <FormPost isEditing= {false}  action = "Create" onSubmit={handlleOnSubmit}  error={createError} success={createSucces} pending={creatPending}/>
         </div>
     )
 }

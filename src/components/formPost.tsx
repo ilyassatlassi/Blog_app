@@ -24,17 +24,16 @@ import { Tag } from "@prisma/client"
 import { formSchema } from "@/lib/FormValidatiopn"
 import { z } from "zod";
 import toast from "react-hot-toast"
+import { error } from "console"
 
 
 const bgInput = "bg-white"
 
-const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
+const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pending }: actions) => {
 
 
-     const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        // defaultValues: iniV
-        
         defaultValues: {
             title: initValues?.title,
             content: initValues?.content,
@@ -53,24 +52,32 @@ const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
     //         toast.success("Successfully Created!")
     //     }
     // })
-    
 
-    // async function handleOnSubmit(values: z.infer<typeof formSchema>) {
-    //     // Do something with the form values.
-    //     // ✅ This will be type-safe and validated.
-    //     onSubmit(values)
-      
-    //    form.reset()
-    // }
 
-    const { data: dataTags} = useQuery<Tag[]>({
+    async function handleOnSubmit(values: z.infer<typeof formSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+         await onSubmit(values)
+         
+         if (form.formState.isSubmitSuccessful) {
+            form.reset({
+            title: "",
+            content: "",
+            tagId: ""
+        })
+        }
+        
+
+    }
+
+    const { data: dataTags } = useQuery<Tag[]>({
         queryKey: ['tags'], queryFn: async () => {
-
             const response = await axios('/api/tags')
             return response.data
         }
     }
     )
+
 
     return (
         <Card className="max-w-2xl inset-x-4 absolute md:inset-x-0 sm:top-14 m-auto max-h-max shadow-2xl bg-neutral-200">
@@ -81,7 +88,7 @@ const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                    <form onSubmit={form.handleSubmit(handleOnSubmit)} className="space-y-3">
                         <FormField
                             control={form.control}
                             name="title"
@@ -102,7 +109,7 @@ const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
                                 <FormItem>
                                     <FormLabel>Content</FormLabel>
                                     <FormControl>
-                                        <Textarea className={bgInput}  placeholder="Post content..." {...field} />
+                                        <Textarea className={bgInput} placeholder="Post content..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -131,11 +138,11 @@ const FormPost = ({ action, isEditing, initValues, onSubmit}: actions) => {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={form.formState.isSubmitting} className="w-full h-full" type="submit">
-                            {form.formState.isSubmitting &&
+                        <Button disabled={pending} className="w-full h-full" type="submit">
+                            {pending &&
                                 (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
-                        
+                           
                             {action}
                         </Button>
                     </form>
