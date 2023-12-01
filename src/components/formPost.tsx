@@ -25,6 +25,7 @@ import { formSchema } from "@/lib/FormValidatiopn"
 import { z } from "zod";
 import toast from "react-hot-toast"
 import { error } from "console"
+import { useEffect } from "react"
 
 
 const bgInput = "bg-white"
@@ -41,32 +42,18 @@ const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pen
         }
     })
 
-    // const { mutate: createPost, isError: createError ,isPending: createPending} = useMutation({
-    //     mutationFn: async (values: z.infer<typeof formSchema>)  => {
-    //         // await new Promise((resolve) => setTimeout(resolve, 2000))
-    //         return axios.post('api/posts/create', values)
-    //     },onError: (error) => {
-    //         toast.error(error.message)
-    //         return 
-    //     },onSuccess: () => {
-    //         toast.success("Successfully Created!")
-    //     }
-    // })
-
+    useEffect(() => {
+        form.reset({
+            title: "",
+            content: "",
+            tagId: "Tags"
+        })
+    }, [success])
 
     async function handleOnSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-         await onSubmit(values)
-         
-         if (form.formState.isSubmitSuccessful) {
-            form.reset({
-            title: "",
-            content: "",
-            tagId: ""
-        })
-        }
-        
+         onSubmit(values)
 
     }
 
@@ -142,7 +129,7 @@ const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pen
                             {pending &&
                                 (<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />)
                             }
-                           
+
                             {action}
                         </Button>
                     </form>
