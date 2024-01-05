@@ -1,11 +1,11 @@
 import ButtonActions from "@/components/ButtonActions"
 import BackButton from "@/components/backButton"
-import prisma from "../../../../prisma/db"
+import { PrismaClient } from '@prisma/client';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { PostIdProps } from "@/lib/utils"
 
-
+const prisma = new PrismaClient();
 
 
 const getPost = async (id: string) => {

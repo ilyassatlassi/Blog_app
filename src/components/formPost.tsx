@@ -18,13 +18,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Textarea } from "./ui/textarea"
 import { actions } from "@/lib/utils"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { Tag } from "@prisma/client"
 import { formSchema } from "@/lib/FormValidatiopn"
 import { z } from "zod";
-import toast from "react-hot-toast"
-import { error } from "console"
+
 import { useEffect } from "react"
 
 

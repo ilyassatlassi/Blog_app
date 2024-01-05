@@ -1,7 +1,6 @@
 "use client"
 import BackButton from "@/components/backButton"
 import FormPost from "@/components/formPost"
-import { Post } from "@prisma/client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { PostIdProps } from "@/lib/utils"

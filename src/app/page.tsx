@@ -1,5 +1,7 @@
 import PostCard from "@/components/PostCard";
-import prisma from "../../prisma/db";
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
  const getPosts = async () => {
      const response = await prisma.post.findMany(
