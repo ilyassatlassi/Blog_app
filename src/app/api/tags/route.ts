@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../prisma/db";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 const getErrorMessage = (error: unknown): string => {
   let message: string;
   if (error instanceof Error) {
