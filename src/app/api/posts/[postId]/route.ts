@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../prisma/db";
 import { formSchema } from "@/lib/FormValidatiopn";
 import { z } from "zod";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 
 const getErrorMessage = (error: unknown): string => {
   let message: string;
