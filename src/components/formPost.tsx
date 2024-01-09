@@ -34,20 +34,16 @@ const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pen
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            title: initValues?.title,
-            content: initValues?.content,
-            tagId: initValues?.tagId
-        }
+        defaultValues: initValues
     })
 
-    useEffect(() => {
-        form.reset({
-            title: "",
-            content: "",
-            tagId: "Tags"
-        })
-    }, [success])
+    // useEffect(() => {
+    //     form.reset({
+    //         title: "",
+    //         content: "",
+    //         tagId: "Tags"
+    //     })
+    // }, [])
 
     async function handleOnSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
@@ -82,7 +78,7 @@ const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pen
                                 <FormItem>
                                     <FormLabel>Title</FormLabel>
                                     <FormControl>
-                                        <Input className={bgInput} placeholder="Post Title..." {...field} />
+                                        <Input defaultValue={field.value} className={bgInput} placeholder="Post Title..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -94,8 +90,8 @@ const FormPost = ({ action, isEditing, initValues, onSubmit, error, success, pen
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Content</FormLabel>
-                                    <FormControl>
-                                        <Textarea className={bgInput} placeholder="Post content..." {...field} />
+                                    <FormControl >
+                                        <Textarea  className={bgInput} placeholder="Post content..." {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

@@ -14,10 +14,11 @@ const EditPost = ({params}:PostIdProps) => {
      const { data: dataPost, isLoading: editLoading} = useQuery({
             queryKey: ['posts', params.postId],
              queryFn: async () => {
-                const response = await axios(`/api/posts/${postId}`)
+                const response = await axios.get(`/api/posts/${postId}`)
                 return response.data
             }
         })
+        console.log(dataPost)
         const router = useRouter()
         const { mutate: createPost, isError: createError, isPending:creatPending, isSuccess: createSucccess } = useMutation({
             

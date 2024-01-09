@@ -7,7 +7,9 @@ import axios from "axios"
 import { useMutation } from "@tanstack/react-query"
 
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
+const router = useRouter()
 const CreatePage = () => {
     const { mutate: createPost, isError: createError, isPending:creatPending , isSuccess: createSucces } = useMutation({
         mutationFn: async (values: z.infer<typeof formSchema>)  => {
@@ -17,6 +19,8 @@ const CreatePage = () => {
             toast.error(error.message)
             return 
         },onSuccess: () => {
+            router.back()
+            router.refresh()
             toast.success("Successfully Created!")
         }
     })
